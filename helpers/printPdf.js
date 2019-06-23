@@ -1,15 +1,17 @@
 const puppeteer = require("puppeteer");
 
-const printPdf = async (url, c) => {
+const printPdf = async (url, token, basic, cookie) => {
     const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
-    await page.setExtraHTTPHeaders({ cookie: "oneSessionId=" + c });
-    // await page.goto(url, {
-    //     waitUntil:['domcontentloaded', 'networkidle0']
-    // });
-    //await page.waitForNavigation({ waitUntil: 'networkidle0' });
-    await page.goto(url);
-    await page.waitFor(15000);
+    if (token && basic) {
+        await page.setExtraHTTPHeaders({ Authorization: "Basic " + basic + ", Bearer " + token });
+    } else if (cookie) {
+        await page.setExtraHTTPHeaders({ cookie: "oneSessionId=" + cookie });
+    }
+    await page.goto(url, {
+        waitUntil:['domcontentloaded', 'networkidle0']
+    });
+    // await page.goto(url);
     const buffer = await page.pdf({
         format: 'A4',
         printBackground: true,

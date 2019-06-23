@@ -1,11 +1,15 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
-const generatePdf = async (p, c) => {
-    const content = fs.readFileSync(p, 'utf-8');
+const generatePdf = async (template, token, basic, cookie) => {
     const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
-    await page.setExtraHTTPHeaders({ cookie: "oneSessionId=" + c });
+    if (token && basic) {
+        await page.setExtraHTTPHeaders({ Authorization: "Basic " + basic + ", Bearer " + token });
+    } else if (cookie) {
+        await page.setExtraHTTPHeaders({ cookie: "oneSessionId=" + cookie });
+    }
+    const content = fs.readFileSync(template, 'utf-8');
     await page.setContent(content);
     const buffer = await page.pdf({
         format: 'A4',
