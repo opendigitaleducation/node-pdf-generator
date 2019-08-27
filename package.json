@@ -2,7 +2,7 @@
   "name": "node-pdf-generator",
   "version": "1.1.0-dev.0",
   "scripts": {
-    "start": "node app.js"
+    "start": "npm install && node app.js"
   },
   "dependencies": {
     "express": "4.17.1",
@@ -11,6 +11,5 @@
     "morgan": "1.9.1",
     "puppeteer": "1.18.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

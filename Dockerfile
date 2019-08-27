@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get purge --auto-remove -y curl \
-  && rm -rf /src/*.deb
+  && rm -rf /src/*.deb 
 
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
@@ -37,4 +37,3 @@ EXPOSE 3000
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD npm run start
-
