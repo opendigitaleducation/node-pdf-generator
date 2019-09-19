@@ -8,10 +8,15 @@ const printPdf = async (url, token, basic, cookie) => {
     } else if (cookie) {
         await page.setExtraHTTPHeaders({ cookie: "oneSessionId=" + cookie });
     }
+    await page.evaluateOnNewDocument(() => {
+        //avoid print popup
+        window.print = function(){}
+        //inform app about context
+        window.pupetterMode = true;
+    });
     await page.goto(url, {
         waitUntil:['domcontentloaded', 'networkidle0']
     });
-    // await page.goto(url);
     const buffer = await page.pdf({
         format: 'A4',
         printBackground: true,
@@ -21,7 +26,7 @@ const printPdf = async (url, token, basic, cookie) => {
             right: '0px',
             bottom: '0px'
         }
-    });
+    });    
     await browser.close();
     return buffer;
 }
