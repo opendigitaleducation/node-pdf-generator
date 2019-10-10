@@ -21,7 +21,11 @@ const convertToPdf = async (filePath, kind) => {
             childProc = exec("soffice --headless --convert-to pdf:calc_pdf_Export --outdir " + tempPath + " " + filePath);
             break;
         case 'csv':
-            childProc = exec("soffice --headless --convert-to csv:\"Text - txt - csv (StarCalc)\" --outdir " + tempPath + " " + filePath);
+            //https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options#Filter_Options_for_the_CSV_Filter
+            //44 is comma separator
+            //second argument for double quote
+            //76 for utf8
+            childProc = exec("soffice --headless --convert-to csv:\"Text - txt - csv (StarCalc)\":44,,76 --outdir " + tempPath + " " + filePath);
             break;
         case 'presentation':
             childProc = exec("soffice --headless --convert-to pdf:impress_pdf_Export --outdir " + tempPath + " " + filePath);
