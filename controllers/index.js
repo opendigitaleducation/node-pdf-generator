@@ -55,7 +55,8 @@ router.post("/convert/pdf", async (req, res, __) => {
       res.status(400).send({ error: "Missing kind" }).end();
       return;
     }
-    result = await convertToPdf(req.files.template.tempFilePath, kind);
+    const allSheets = req.param("allSheets", "false") == "true";
+    result = await convertToPdf(req.files.template.tempFilePath, kind, {allSheets});
     if(kind=="csv"){
       res.attachment(`${req.param("name", kind)}.csv`);
       res.contentType("text/csv");
