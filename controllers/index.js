@@ -12,6 +12,7 @@ router.post("/generate/pdf", async (req, res, __) => {
       res.status(400).end();
       return;
     }
+    console.log("[generatePdf] using token: ", req.body.token, " Auth: ", config.auth, "OneSessionId", req.cookies.oneSessionId)
     let result = await generatePdf(req.files.template.tempFilePath, req.body.token, config.auth, req.cookies.oneSessionId);
     let name = req.body.name;
     if (!name) {
@@ -21,6 +22,7 @@ router.post("/generate/pdf", async (req, res, __) => {
     res.contentType("application/pdf");
     res.send(result);
   } catch (e) {
+    console.warn("Generate pdf failed: ",e);
     res.status(500).send({ error: `${e}` }).end();
   }
 });
@@ -31,6 +33,7 @@ router.post("/print/pdf", async (req, res, __) => {
       res.status(400).end();
       return;
     }
+    console.log("[printPdf] using token: ", req.body.token, " Auth: ", config.auth, "OneSessionId", req.cookies.oneSessionId, "from url: ",req.body.url)
     let result = await printPdf(req.body.url, req.body.token, config.auth, req.cookies.oneSessionId);
     let name = req.body.name;
     if (!name) {
@@ -40,6 +43,7 @@ router.post("/print/pdf", async (req, res, __) => {
     res.contentType("application/pdf");
     res.send(result);
   } catch (e) {
+    console.warn("Print pdf failed: ",e);
     res.status(500).send({ error: `${e}` }).end();
   }
 });
@@ -66,6 +70,7 @@ router.post("/convert/pdf", async (req, res, __) => {
     }
     res.send(result);
   } catch (e) {
+    console.warn("Convert pdf failed: ", e);
     res.status(500).send({ error: `${e}` }).end();
   }
 });

@@ -17,9 +17,15 @@ const printPdf = async (url, token, basic, cookie) => {
     await page.goto(url, {
         waitUntil:['domcontentloaded', 'networkidle0']
     });
+    const config = await page.evaluate(()=>{
+        var html = document.getElementsByTagName("html");
+        html[0].classList.add("node-pdf-generator");
+        return window.pdfGeneratorConfig || {};
+    });
     const buffer = await page.pdf({
-        format: 'A4',
+        format: config.format || 'A4',
         printBackground: true,
+        landscape: config.landscape,
         margin: {
             left: '0px',
             top: '0px',
