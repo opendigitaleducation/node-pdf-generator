@@ -56,10 +56,19 @@ const convertToPdf = async (filePath, kind) => {
     const output = (kind == "csv" || kind == "csv_multisheet") ? fullname + ".csv" : fullname + ".pdf";
     const outputPath = path.join(tempPath, output);
     toClean.push(outputPath);
+    toClean.push(filePath)
     const result = await readFile(outputPath);
-    for(let file of toClean){
-        await unlinkFile(file);
+    //dont wait clean
+    const cleaner = async () => {
+        for(let file of toClean){
+            try{
+                await unlinkFile(file);
+            }catch(e){
+                console.error('[convertToPdf] Could not unlink file : ', file)
+            }
+        }
     }
+    cleaner();
     return result;
 }
 
