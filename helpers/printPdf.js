@@ -15,7 +15,8 @@ const printPdf = async (url, token, basic, cookie) => {
         window.pupetterMode = true;
     });
     await page.goto(url, {
-        waitUntil:['domcontentloaded', 'networkidle0']
+        waitUntil:['domcontentloaded', 'networkidle0'],
+        timeout: 90000
     });
     const config = await page.evaluate(()=>{
         var html = document.getElementsByTagName("html");
